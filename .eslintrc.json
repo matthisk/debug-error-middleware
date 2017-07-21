@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "globals": {
+    "console": true,
+  },
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "plugins": [
+    "prettier",
+    "flowtype"
+  ],
+  "rules": {
+    "space-infix-ops": 0,
+    "no-duplicate-imports": 0,
+    "import/no-duplicates": 1
+  }
+}

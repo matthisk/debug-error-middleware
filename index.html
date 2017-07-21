@@ -1,0 +1,313 @@
+<html>
+
+<head>
+  <style>
+    /*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
+
+    html,
+    body,
+    p,
+    ol,
+    ul,
+    li,
+    dl,
+    dt,
+    dd,
+    blockquote,
+    figure,
+    fieldset,
+    legend,
+    textarea,
+    pre,
+    iframe,
+    hr,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+      padding: 0
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: 100%;
+      font-weight: normal
+    }
+
+    ul {
+      list-style: none
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      margin: 0
+    }
+
+    html {
+      box-sizing: border-box
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit
+    }
+
+    img,
+    embed,
+    iframe,
+    object,
+    audio,
+    video {
+      height: auto;
+      max-width: 100%
+    }
+
+    iframe {
+      border: 0
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    td,
+    th {
+      padding: 0;
+      text-align: left
+    }
+
+    html {
+      font-family: 'Lato', 'Open Sans', sans-serif;
+      font-size: 16px;
+    }
+
+    .exception {
+      padding: 25px;
+    }
+
+    .exception-constructor {
+      margin-bottom: 5px;
+    }
+
+    .exception-message {
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+
+    .exception h3 {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .stack-trace {
+      font-size: 0.85em;
+      border: 1px solid rgb(216, 210, 222);
+      border-radius: 3px;
+      width: 100%;
+    }
+
+    .stack-trace-line {
+      padding: 8px 10px;
+      background: rgb(248, 250, 253);
+      border-bottom: 1px solid rgb(226, 222, 230);
+      cursor: pointer;
+    }
+
+    .stack-trace-line:hover {
+      background: #fcfdfe;
+    }
+
+    .stack-trace-line:nth-child(even) {
+      background: #f8fafd;
+    }
+
+    .stack-trace-line:last-child {
+      border-bottom: none;
+    }
+
+    .stack-trace-editor {
+      display: none;
+      padding: 10px 0;
+    }
+
+    .stack-trace-editor-open {
+      display: block;
+    }
+
+    .stack-trace-code {
+      font-family: monospace;
+      padding: 6px 15px;
+      color: #222;
+    }
+
+    .stack-trace-code pre span {
+      font-size: 0.8rem;
+      margin-right: 1rem;
+    }
+
+    .stack-trace-code-active {
+      background-color: #6c5fc7;
+      color: #fff;
+    }
+
+    .light {
+      font-weight: 300;
+    }
+
+    .bold {
+      font-weight: 700;
+      color: #2f2936;
+    }
+
+    .variables {
+      margin: 2rem 0;
+    }
+
+    .variables h3 {
+      font-size: 1rem;
+      color: #968ba0;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .variables table {
+      font-size: 0.9rem;
+    }
+
+    .variables table tr>td {
+      padding-bottom: 1rem;
+    }
+
+    .variables table tr>td:first-child {
+      font-weight: 700;
+      padding-right: 1rem;
+      width: 300px;
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+
+    .variables table tr>td:last-child {
+      min-width: 500px;
+    }
+
+    .variables table tr>td:last-child>div {
+      background-color: #f7f8f9;
+      border-radius: 4px;
+      padding: 10px 10px;
+      font-weight: 300;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+</head>
+
+<body>
+  <div class="exception">
+
+    <h3 class="exception-constructor">{{ exception.constructor.name }}</h3>
+    <p class="exception-message">{{ exception.message }}</p>
+
+    <div class="stack-trace">
+      {{#each stack}}
+      <div class="stack-trace-line">
+        <span class="bold">{{ path }}</span><span class="light"> at </span><span class="bold"> {{ at }} </span><span class="light"> at line </span><span class="bold">{{ line }}:{{ column }}</span>
+      </div>
+      <div class="stack-trace-editor">
+        {{#each context}}
+        <div class="stack-trace-code {{#if active}}stack-trace-code-active{{/if}}">
+
+          <pre><span>{{ line }}.</span>{{ text }}</pre>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+    </div>
+
+    <div class="request variables">
+      <h3>Request</h3>
+      <table>
+        <tbody>
+          {{#each request}}
+          <tr>
+            <td>{{ key }}</td>
+            <td>
+              <div>{{ value }}</div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="headers variables">
+      <h3>Headers</h3>
+      <table>
+        <tbody>
+          {{#each headers}}
+          <tr>
+            <td>{{ key }}</td>
+            <td>
+              <div>{{ value }}</div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="environment variables">
+      <h3>Environment</h3>
+      <table>
+        <tbody>
+          {{#each environment}}
+          <tr>
+            <td>{{ key }}</td>
+            <td>
+              <div>{{ value }}</div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="globals variables">
+      <h3>Globals</h3>
+      <table>
+        <tbody>
+          {{#each globals}}
+          <tr>
+            <td>{{ key }}</td>
+            <td>
+              <div>{{ value }}</div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      document.querySelectorAll('.stack-trace-line')
+        .forEach(el => {
+          el.addEventListener('click', (event) => {
+            el.nextElementSibling.classList.toggle('stack-trace-editor-open');
+          });
+        });
+    })();
+  </script>
+</body>
+
+</html>
