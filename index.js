@@ -2,15 +2,29 @@
 
 const Koa = require("koa");
 const fs = require("fs");
-const util = require("util");
 const Handlebars = require("handlebars");
-const readFile = util.promisify(fs.readFile);
-const exists = util.promisify(fs.exists);
 
 const template = fs.readFileSync("./index.html").toString();
 const renderTemplate = Handlebars.compile(template, {});
 
+const util = require("./src/util");
+
+const readFile = util.promisify(fs.readFile);
+const exists = util.promisify(fs.exists);
+
 const app = new Koa();
+
+async function loadCodeMirror() {
+  const codemirrorSRC = await readFile('./lib/codemirror/codemirror.js');
+  const codemirrorModeJS = await readFile('./lib/codemirror/javascript.js');
+  const codemirrorStyles = await readFile('./lib/codemirror/codemirror.css');
+  const codemirrorTheme = await readFile('./lib/codemirror/theme/monokai.css');
+
+  return {
+    codemirrorSRC: codemirrorSRC + codemirrorModeJS,
+    codemirrorStyles: codemirrorStyles + codemirrorTheme,
+  };
+}
 
 async function parseStack(error) {
   const stack = error.stack.split("\n").slice(1);
@@ -35,14 +49,10 @@ async function parseStack(error) {
 
       if (await exists(result.path)) {
         result.fileContent = (await readFile(result.path)).toString();
-        result.context = result.fileContent
-          .split("\n")
-          .slice(lineNumber - 10, lineNumber + 10)
-          .map((l, i) => ({
-            active: lineNumber - 10 + i + 1 === lineNumber,
-            line: lineNumber - 10 + i,
-            text: l
-          }));
+        result.context = {};
+        result.context.lineStart = lineNumber - 10;
+        result.context.lineNumber = lineNumber;
+        result.context.code = result.fileContent;
       }
 
       return result;
@@ -87,32 +97,55 @@ function getRequest(request) {
   });
 }
 
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (error) {
-    ctx.status = 500;
-    ctx.body = renderTemplate({
-      exception: error,
-      headers: getHeaders(ctx.request),
-      request: getRequest(ctx.request),
-      stack: await parseStack(error),
-      environment: getEnvironment(),
-      globals: getGlobals()
-    });
+function getProcess() {
+  return [
+    { key: "platform", value: process.platform },
+    { key: "arch", value: process.arch },
+    { key: "node_version", value: process.version },
+    { key: "cwd", value: process.cwd() },
+    { key: "execPath", value: process.execPath },
+    { key: "pid", value: process.pid },
+    { key: "mainModule", value: process.mainModule.filename },
+    {
+      key: "memoryUsage",
+      value: util.humanize(process.memoryUsage().heapTotal)
+    }
+  ];
+}
 
-    // ctx.body = error.stack;
+async function setup() {
+  const codemirror = await loadCodeMirror();
 
-    // ctx.body += "\n";
+  app.use(async (ctx, next) => {
+    try {
+      // 1: Try to run code
+      await next();
+      // 2: Catch error
+    } catch (error) {
+      // 3: Create config for Handlebars
+      let config = {
+        exception: error,
+        headers: getHeaders(ctx.request),
+        request: getRequest(ctx.request),
+        stack: await parseStack(error),
+        environment: getEnvironment(),
+        globals: getGlobals(),
+        process: getProcess()
+      };
 
-    // Object.keys(global).forEach(key => {
-    //   ctx.body += `${key}: ${global[key]}\n\n`;
-    // });
-  }
-});
+      config = Object.assign({}, config, codemirror);
 
-app.use(async (ctx, next) => {
-  throw new TypeError("Converting circular structure to JSON");
-});
+      // 4: Render a 500 page with Handlebars
+      ctx.status = 500;
+      ctx.body = renderTemplate(config);
+    }
+  });
 
-app.listen(3000);
+  app.use(async (ctx, next) => {
+    throw new TypeError("Converting circular structure to JSON");
+  });
+
+  app.listen(3000);
+}
+
+setup();

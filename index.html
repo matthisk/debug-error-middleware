@@ -1,6 +1,10 @@
 <html>
 
 <head>
+  <title>{{ exception.constructor.name }} - Exception Page</title>
+  <style>
+    {{{ codemirrorStyles }}}
+  </style>
   <style>
     /*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
 
@@ -91,13 +95,38 @@
       font-family: 'Lato', 'Open Sans', sans-serif;
       font-size: 16px;
     }
+    /**
+    START CUSTOM STYLING
+    **/
+    html {
+      background: black;
+      padding: 10px;
+    }
+    body {
+      border: 5px solid #dd2121;
+      background: white;
+      /* background: #dd2121; */
+      /* color: rgba(255, 255, 255, 0.9); */
+    }
 
-    .exception {
-      padding: 25px;
+    .flex-container {
+      display: flex;
+      padding: 2rem;
+    }
+
+    .flex-left,
+    .flex-right {
+      flex: 1 auto;
+    }
+
+    .flex-left {
+      width: 80%;
+      margin-right: 2rem;
     }
 
     .exception-constructor {
       margin-bottom: 5px;
+      color: #dd2121;
     }
 
     .exception-message {
@@ -137,12 +166,17 @@
     }
 
     .stack-trace-editor {
-      display: none;
-      padding: 10px 0;
+      height: 0px;
+      padding: 0;
     }
 
     .stack-trace-editor-open {
-      display: block;
+      height: 400px;
+    }
+
+    .CodeMirror {
+      height: auto;
+      line-height: 1.5rem;
     }
 
     .stack-trace-code {
@@ -157,8 +191,7 @@
     }
 
     .stack-trace-code-active {
-      background-color: #6c5fc7;
-      color: #fff;
+      background-color: rgba(108, 95, 199, 0.5);
     }
 
     .light {
@@ -175,7 +208,7 @@
     }
 
     .variables h3 {
-      font-size: 1rem;
+      font-size: 1.3rem;
       color: #968ba0;
       text-transform: uppercase;
       margin-bottom: 1rem;
@@ -207,103 +240,177 @@
       padding: 10px 10px;
       font-weight: 300;
     }
+
+    .context h3 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    dl {}
+
+    dl>dt {
+      font-size: 1rem;
+      font-weight: 700;
+      border-bottom: 5px solid rgba(0, 0, 0, 0.15);
+    }
+
+    dl>dd {
+      font-size: 0.8rem;
+      text-align: right;
+      margin-top: 0.1rem;
+      margin-bottom: 1rem;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+
 </head>
 
 <body>
-  <div class="exception">
+  <div class="flex-container">
+    <div class="flex-left exception">
 
-    <h3 class="exception-constructor">{{ exception.constructor.name }}</h3>
-    <p class="exception-message">{{ exception.message }}</p>
+      <h3 class="exception-constructor">{{ exception.constructor.name }}</h3>
+      <p class="exception-message">{{ exception.message }}</p>
 
-    <div class="stack-trace">
-      {{#each stack}}
-      <div class="stack-trace-line">
-        <span class="bold">{{ path }}</span><span class="light"> at </span><span class="bold"> {{ at }} </span><span class="light"> at line </span><span class="bold">{{ line }}:{{ column }}</span>
-      </div>
-      <div class="stack-trace-editor">
-        {{#each context}}
-        <div class="stack-trace-code {{#if active}}stack-trace-code-active{{/if}}">
-
-          <pre><span>{{ line }}.</span>{{ text }}</pre>
+      <div class="stack-trace">
+        {{#each stack}}
+        <div class="stack-trace-line">
+          <span class="bold">{{ path }}</span><span class="light"> at </span><span class="bold"> {{ at }} </span><span class="light"> at line </span><span class="bold">{{ line }}:{{ column }}</span>
         </div>
+        
+        {{#if context.lineNumber}}
+        <div class="stack-trace-editor">
+          <textarea class="editor" data-line="{{context.lineNumber}}" data-start="{{context.lineStart}}">{{context.code}}</textarea>
+        </div>
+        {{/if}}
         {{/each}}
       </div>
-      {{/each}}
+
+      <div class="request variables">
+        <h3>Request</h3>
+        <table>
+          <tbody>
+            {{#each request}}
+            <tr>
+              <td>{{ key }}</td>
+              <td>
+                <div>{{ value }}</div>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="headers variables">
+        <h3>Headers</h3>
+        <table>
+          <tbody>
+            {{#each headers}}
+            <tr>
+              <td>{{ key }}</td>
+              <td>
+                <div>{{ value }}</div>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="environment variables">
+        <h3>Environment</h3>
+        <table>
+          <tbody>
+            {{#each environment}}
+            <tr>
+              <td>{{ key }}</td>
+              <td>
+                <div>{{ value }}</div>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="globals variables">
+        <h3>Globals</h3>
+        <table>
+          <tbody>
+            {{#each globals}}
+            <tr>
+              <td>{{ key }}</td>
+              <td>
+                <div>{{ value }}</div>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="request variables">
-      <h3>Request</h3>
-      <table>
-        <tbody>
-          {{#each request}}
-          <tr>
-            <td>{{ key }}</td>
-            <td>
-              <div>{{ value }}</div>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="headers variables">
-      <h3>Headers</h3>
-      <table>
-        <tbody>
-          {{#each headers}}
-          <tr>
-            <td>{{ key }}</td>
-            <td>
-              <div>{{ value }}</div>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="environment variables">
-      <h3>Environment</h3>
-      <table>
-        <tbody>
-          {{#each environment}}
-          <tr>
-            <td>{{ key }}</td>
-            <td>
-              <div>{{ value }}</div>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="globals variables">
-      <h3>Globals</h3>
-      <table>
-        <tbody>
-          {{#each globals}}
-          <tr>
-            <td>{{ key }}</td>
-            <td>
-              <div>{{ value }}</div>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
+    <div class="flex-right context">
+      <h3>System</h3>
+      <dl>
+        {{#each process}}
+        <dt>{{ key }}</dt>
+        <dd>{{ value }}</dd>
+        {{/each}}
     </div>
   </div>
 
   <script>
+    {{{ codemirrorSRC }}}
+  </script>
+  <script>
     (function () {
+      var editors = {};
+      
+      document.querySelectorAll('.editor')
+        .forEach((el, i) => {
+          el.id = 'codemirror-' + i;
+          var editor = CodeMirror.fromTextArea(el, {
+            lineNumbers: true,
+            // firstLineNumber: parseInt(el.getAttribute('data-start'), 10),
+            mode: 'javascript',
+            readOnly: true,
+            theme: 'monokai',
+            viewportMargin: Infinity,
+          });
+
+          editors[el.id] = editor;
+        });
+      
       document.querySelectorAll('.stack-trace-line')
         .forEach(el => {
           el.addEventListener('click', (event) => {
-            el.nextElementSibling.classList.toggle('stack-trace-editor-open');
+            var sibling = el.nextElementSibling;
+
+            if (!sibling.classList.contains('stack-trace-editor')) return;
+
+            var textarea = sibling.querySelector('textarea');
+
+            sibling.classList.toggle('stack-trace-editor-open');
+
+            editors[textarea.id].refresh();
+
+            const line = parseInt(textarea.getAttribute('data-line'), 10);
+            const lineDOM = sibling.querySelector('.CodeMirror-code').childNodes[line - 1];
+            const scrollTo = lineDOM.getBoundingClientRect().top - (sibling.clientHeight*0.5);
+
+
+            console.log({
+              line: line,
+              scrollTop: lineDOM.getBoundingClientRect().top,
+              clientHeight: sibling.clientHeight,
+            });
+            editors[textarea.id].scrollTo(0, scrollTo);
+
+            lineDOM.classList.add('stack-trace-code-active');
           });
         });
     })();
