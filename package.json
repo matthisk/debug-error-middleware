@@ -1,8 +1,11 @@
 {
-  "name": "koa-ehm",
+  "name": "stack-middleware",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "mocha tests/express.js; mocha tests/koa.js" 
+  },
   "dependencies": {
     "handlebars": "^4.0.10",
     "highlight.js": "^9.12.0"
