@@ -1,7 +1,9 @@
 ## Express/Koa error handling middleware
 
-Express/Koa error handling middleware. Apply this middleware to display context
-information in the response to a failed request.
+Apply this middleware to display context information in the response to a failed 
+request.
+
+![Example Page](https://raw.githubusercontent.com/matthisk/stack-middleware/master/assets/example.png)
 
 Currently we support these two HTTP frameworks:
 
