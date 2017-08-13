@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const Handlebars = require('handlebars');
 
@@ -34,7 +36,7 @@ function parseStack(error) {
   const regex = /at ([\w.]+) \(([^:]+):(\d+):(\d+)\)/;
 
   const results = Promise.all(
-    stack.map(async line => {
+    stack.map(line => {
       const match = line.match(regex);
 
       if (!match) return undefined;
@@ -50,15 +52,20 @@ function parseStack(error) {
         fileContent: ''
       };
 
-      if (await exists(result.path)) {
-        result.fileContent = (await readFile(result.path)).toString();
-        result.context = {};
-        result.context.lineStart = lineNumber - 10;
-        result.context.lineNumber = lineNumber;
-        result.context.code = result.fileContent;
-      }
+      return exists(result.path).then(e => {
+        if (e) {
+          return readFile(result.path).then(file => {
+            result.fileContent = file.toString();
+            result.context = {};
+            result.context.lineStart = lineNumber - 10;
+            result.context.lineNumber = lineNumber;
+            result.context.code = result.fileContent;
 
-      return result;
+            return result;
+          });
+        }
+        return result;
+      });
     })
   );
 

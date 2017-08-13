@@ -1,3 +1,5 @@
+'use strict';
+
 const Koa = require('koa');
 
 const stack = require('../index').koa;

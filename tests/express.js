@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const expect = require('chai').expect;
 const request = require('request');

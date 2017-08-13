@@ -1,3 +1,5 @@
+'use strict';
+
 const Koa = require('koa');
 const expect = require('chai').expect;
 const request = require('request');

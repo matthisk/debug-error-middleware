@@ -1,3 +1,5 @@
+'use strict';
+
 const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
 module.exports.humanize = function humanize(arg0) {
