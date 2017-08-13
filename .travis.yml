@@ -10,8 +10,8 @@ cache:
     - "node_modules"
 before_script:
   - node_version=$(node -e "console.log(/^v(\d+)/.exec(process.version)[1])")
-  - if [[ node_version > 3 ]]; then npm install express; fi
-  - if [[ node_version > 6 ]]; then npm install koa; fi
+  - if [[ $node_version > 3 ]]; then npm install express; fi
+  - if [[ $node_version > 6 ]]; then npm install koa; fi
 script:
-  - if [[ node_version > 3 ]]; then mocha tests/express.js; fi
-  - if [[ node_version > 6 ]]; then mocha tests/koa.js; fi
+  - if [[ $node_version > 3 ]]; then mocha tests/express.js; fi
+  - if [[ $node_version > 6 ]]; then mocha tests/koa.js; fi
