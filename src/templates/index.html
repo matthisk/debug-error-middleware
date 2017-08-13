@@ -95,33 +95,91 @@
       font-family: 'Lato', 'Open Sans', sans-serif;
       font-size: 16px;
     }
+
+    /**
+    TABLE STYLING
+    **/
+    .table {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 0 3em 0;
+      padding: 0;
+    }
+    .table-cell {
+      box-sizing: border-box;
+      flex-grow: 1;
+      width: 100%; 
+      padding: 0.8em 1.2em;
+      overflow: hidden;
+      list-style: none;
+      border: solid 1px white;
+      background: rgba(112, 128, 144, 0.15);
+      word-wrap: break-word;
+      margin: -1px 0 0 -1px;
+      /* > h1, > h2, > h3, > h4, > h5, > h6 { margin: 0; } */ 
+    }
+
+    /* Table column sizing
+    ================================== */
+    .table--2cols > .table-cell  { width: 50%; }  
+    .table--3cols > .table-cell  { width: 33.33%; }
+    .table--4cols > .table-cell  { width: 25%; }
+    .table--5cols > .table-cell  { width: 20%; }
+    .table--6cols > .table-cell  { width: 16.6%; }
+
+    /* Table  col span
+    ================================== */
+    .table-cell.table-cell--1of1  { width: 100%; }
+    .table-cell.table-cell--5of6  { width: 83.33; }
+    .table-cell.table-cell--4of5  { width: 80%; }
+    .table-cell.table-cell--3of4  { width: 75%; }
+    .table-cell.table-cell--2of3  { width: 66.66%; }
+    .table-cell.table-cell--3of5  { width: 60%; }
+    .table-cell.table-cell--1of2  { width: 50%; }
+    .table-cell.table-cell--2of4  { width: 40%; }
+    .table-cell.table-cell--1of3  { width: 33.33%; }
+    .table-cell.table-cell--1of4  { width: 25%; }
+    .table-cell.table-cell--1of5  { width: 20%; }
+    .table-cell.table-cell--1of6  { width: 16.66%; }
+
+
+    /* Responsive
+    ==================================== */
+     @media all and (max-width: 1024px) {
+      /* .table--collapse  {
+        display: block;
+      } */
+      .table--collapse > .table-cell { width: 100% !important; }
+      .table--collapse > .table-cell--foot { margin-bottom: 1em; }
+    } 
+
     /**
     START CUSTOM STYLING
     **/
-    html {
-      background: black;
-      padding: 10px;
-    }
     body {
       border: 5px solid #dd2121;
       background: white;
-      /* background: #dd2121; */
-      /* color: rgba(255, 255, 255, 0.9); */
     }
 
-    .flex-container {
+    div {
+      box-sizing: border-box;
+    }
+
+    main {
       display: flex;
-      padding: 2rem;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 5px;
     }
 
-    .flex-left,
-    .flex-right {
-      flex: 1 auto;
+    article {
+      flex: 3 1 0;
+      margin: 10px;
     }
 
-    .flex-left {
-      width: 80%;
-      margin-right: 2rem;
+    aside {
+      flex: 1 1 0;
+      margin: 10px;
     }
 
     .exception-constructor {
@@ -134,7 +192,7 @@
       font-size: 0.9rem;
     }
 
-    .exception h3 {
+    main h3 {
       font-weight: 700;
       font-size: 1.5rem;
     }
@@ -209,36 +267,42 @@
 
     .variables h3 {
       font-size: 1.3rem;
-      color: #968ba0;
+      color: black;
+      /* color: #434d57; */
+       /* color: #968ba0;  */
       text-transform: uppercase;
       margin-bottom: 1rem;
     }
 
-    .variables table {
+    .variables .table {
       font-size: 0.9rem;
     }
 
-    .variables table tr>td {
-      padding-bottom: 1rem;
-    }
-
-    .variables table tr>td:first-child {
+    .variables .table .table-cell:nth-child(odd) {
       font-weight: 700;
-      padding-right: 1rem;
-      width: 300px;
-      max-width: 300px;
       word-wrap: break-word;
+      border-color: #5a6673;
+      background-color: slategray;
+      color: white;
     }
 
-    .variables table tr>td:last-child {
-      min-width: 500px;
-    }
-
-    .variables table tr>td:last-child>div {
+    .variables .table .table-cell:nth-child(even) {
       background-color: #f7f8f9;
-      border-radius: 4px;
-      padding: 10px 10px;
       font-weight: 300;
+      border-color: #e2e6e9;
+    }
+
+    .variables .table .table-cell:first-child {
+      border-top-left-radius: 2px;
+    }
+    .variables .table .table-cell:nth-child(2) {
+      border-top-right-radius: 2px;
+    }
+    .variables .table .table-cell:last-child {
+      border-bottom-right-radius: 2px;
+    }
+    .variables .table .table-cell:nth-last-child(2) {
+      border-bottom-left-radius:  2px;
     }
 
     .context h3 {
@@ -248,7 +312,9 @@
       margin-bottom: 2rem;
     }
 
-    dl {}
+    dl {
+      margin: 15px 0;
+    }
 
     dl>dt {
       font-size: 1rem;
@@ -262,14 +328,20 @@
       margin-top: 0.1rem;
       margin-bottom: 1rem;
     }
+
+    @media screen and (min-device-width: 1024px) {
+      main {
+        flex-direction: row;
+      }
+    }
   </style>
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
 
 </head>
 
 <body>
-  <div class="flex-container">
-    <div class="flex-left exception">
+  <main>
+    <article>
 
       <h3 class="exception-constructor">{{ exception.constructor.name }}</h3>
       <p class="exception-message">{{ exception.message }}</p>
@@ -290,78 +362,54 @@
 
       <div class="request variables">
         <h3>Request</h3>
-        <table>
-          <tbody>
+        <div class="table table--4cols table--collapse">
             {{#each request}}
-            <tr>
-              <td>{{ key }}</td>
-              <td>
-                <div>{{ value }}</div>
-              </td>
-            </tr>
+            <div class="table-cell table-cell--1of4 table-cell--head">{{ key }}</div>
+            <div class="table-cell table-cell--3of4 table-cell--foot">{{ value }}</div>
             {{/each}}
-          </tbody>
-        </table>
+        </div>
       </div>
 
       <div class="headers variables">
         <h3>Headers</h3>
-        <table>
-          <tbody>
+        <div class="table table--4cols table--collapse">
             {{#each headers}}
-            <tr>
-              <td>{{ key }}</td>
-              <td>
-                <div>{{ value }}</div>
-              </td>
-            </tr>
+            <div class="table-cell table-cell--1of4">{{ key }}</div>
+            <div class="table-cell table-cell--3of4 table-cell--foot">{{ value }}</div>
             {{/each}}
-          </tbody>
-        </table>
+        </div>
       </div>
 
       <div class="environment variables">
         <h3>Environment</h3>
-        <table>
-          <tbody>
+        <div class="table table--4cols table--collapse">
             {{#each environment}}
-            <tr>
-              <td>{{ key }}</td>
-              <td>
-                <div>{{ value }}</div>
-              </td>
-            </tr>
+            <div class="table-cell table-cell--1of4">{{ key }}</div>
+            <div class="table-cell table-cell--3of4 table-cell--foot">{{ value }}</div>
             {{/each}}
-          </tbody>
-        </table>
+        </div>
       </div>
 
       <div class="globals variables">
         <h3>Globals</h3>
-        <table>
-          <tbody>
+        <div class="table table--4cols table--collapse">
             {{#each globals}}
-            <tr>
-              <td>{{ key }}</td>
-              <td>
-                <div>{{ value }}</div>
-              </td>
-            </tr>
+            <div class="table-cell table-cell--1of4">{{ key }}</div>
+            <div class="table-cell table-cell--3of4 table-cell--foot">{{ value }}</div>
             {{/each}}
-          </tbody>
-        </table>
+        </div>
       </div>
-    </div>
+    </article>
 
-    <div class="flex-right context">
+    <aside>
       <h3>System</h3>
       <dl>
         {{#each process}}
         <dt>{{ key }}</dt>
         <dd>{{ value }}</dd>
         {{/each}}
-    </div>
-  </div>
+    </aside>
+  </main>
 
   <script>
     {{{ codemirrorSRC }}}

@@ -1,8 +1,6 @@
-'use strict';
+const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-const UNITS = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-module.exports.humanize = num => {
+module.exports.humanize = function humanize(num) {
   if (!Number.isFinite(num)) {
     throw new TypeError(`Expected a finite number, got ${typeof num}: ${num}`);
   }
@@ -14,23 +12,22 @@ module.exports.humanize = num => {
   }
 
   if (num < 1) {
-    return (neg ? "-" : "") + num + " B";
+    return `${(neg ? '-' : '') + num} B`;
   }
 
   const exponent = Math.min(Math.floor(Math.log10(num) / 3), UNITS.length - 1);
   const numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3));
   const unit = UNITS[exponent];
 
-  return (neg ? "-" : "") + numStr + " " + unit;
+  return `${(neg ? '-' : '') + numStr} ${unit}`;
 };
 
-module.exports.promisify = function (fn) {
-  return function () {
+module.exports.promisify = function promisify(fn) {
+  return function promise() {
     const args = Array.prototype.slice.call(arguments);
 
-    return new Promise(function (resolve, reject) {
-
-      args.push(function (errOrResult, result) {
+    return new Promise((resolve, reject) => {
+      args.push((errOrResult, result) => {
         if (errOrResult instanceof Error) reject(errOrResult);
         if (errOrResult) return resolve(errOrResult);
         return resolve(result);
@@ -39,4 +36,13 @@ module.exports.promisify = function (fn) {
       fn.apply(this, args);
     });
   };
-}
+};
+
+module.exports.toKeyValueList = function toKeyValueList(object) {
+  return Object.keys(object)
+    .map(key => ({
+      key,
+      value: object[key] || '&nbsp;'
+    }))
+    .sort((a, b) => a.key.toLowerCase() > b.key.toLowerCase());
+};
