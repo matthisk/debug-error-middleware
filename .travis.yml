@@ -13,5 +13,5 @@ before_script:
   - if [[ $node_version > 3 ]]; then npm install express; fi
   - if [[ $node_version > 6 ]]; then npm install koa; fi
 script:
-  - if [[ $node_version > 3 ]]; then ./node_modules/.bin/mocha tests/express.js; fi
-  - if [[ $node_version > 6 ]]; then ./node_modules/.bin/mocha tests/koa.js; fi
+  - if [[ $node_version > 3 ]]; then ./node_modules/mocha/bin/mocha tests/express.js; fi
+  - if [[ $node_version > 6 ]]; then ./node_modules/mocha/bin/mocha tests/koa.js; fi
