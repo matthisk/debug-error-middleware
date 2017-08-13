@@ -3,7 +3,7 @@ const stack = require('../index').express;
 
 const app = express();
 
-app.use((req, res, end) => {
+app.use(() => {
   throw new TypeError('Converting circular structure to JSON');
 });
 

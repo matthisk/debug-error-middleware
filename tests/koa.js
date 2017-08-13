@@ -27,7 +27,7 @@ function checkBody(body) {
 
 describe('#stack', () => {
   it('handles a synchronous error', done => {
-    app.use(async (ctx, next) => {
+    app.use(async () => {
       throw new TypeError('Hello World');
     });
 

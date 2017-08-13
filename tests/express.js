@@ -25,6 +25,7 @@ function checkBody(body) {
 
 describe('#stack', () => {
   it('handles a synchronous error', done => {
+    // eslint-disable-next-line no-unused-vars
     app.use((req, res, next) => {
       throw new TypeError('Hello World');
     });

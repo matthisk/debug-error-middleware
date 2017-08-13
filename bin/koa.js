@@ -6,7 +6,7 @@ const app = new Koa();
 
 app.use(stack());
 
-app.use(async (ctx, next) => {
+app.use(async () => {
   throw new TypeError('Converting circular structure to JSON');
 });
 

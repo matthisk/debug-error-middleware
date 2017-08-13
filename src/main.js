@@ -31,7 +31,7 @@ function loadCodeMirror() {
 
 function parseStack(error) {
   const stack = error.stack.split('\n').slice(1);
-  const regex = /at\ ([\w.]+)\ \(([^:]+)\:(\d+):(\d+)\)/;
+  const regex = /at ([\w.]+) \(([^:]+):(\d+):(\d+)\)/;
 
   const results = Promise.all(
     stack.map(async line => {
