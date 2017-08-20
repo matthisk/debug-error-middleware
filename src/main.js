@@ -15,10 +15,10 @@ const exists = util.promisify(fs.exists);
 
 function loadCodeMirror() {
   const p = Promise.all([
-    readFile('./lib/codemirror/codemirror.js'),
-    readFile('./lib/codemirror/javascript.js'),
-    readFile('./lib/codemirror/codemirror.css'),
-    readFile('./lib/codemirror/theme/monokai.css')
+    readFile(path.join(__dirname, '../lib/codemirror/codemirror.js')),
+    readFile(path.join(__dirname, '../lib/codemirror/javascript.js')),
+    readFile(path.join(__dirname, '../lib/codemirror/codemirror.css')),
+    readFile(path.join(__dirname, '../lib/codemirror/theme/monokai.css'))
   ]);
 
   return p.then(args => {
