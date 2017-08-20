@@ -14,14 +14,23 @@ Currently we support these two HTTP frameworks:
 
 ### Setup
 
+Never enable the DEBUG middleware in a production environment. This could result
+in leaking sensitive information (e.g. ENV variables). The middleware throws an
+error if you try to load it when `NODE_ENV` is set to `"production"`.
+
 **Express**
+
+The debug middleware should be loaded first so we can catch errors from all 
+other middleware.
 
 ```javascript
 var stack = require('stack-middleware').express;
 
 var app = express();
 
-app.use(stack());
+if (process.env.NODE_ENV === 'development') {
+  app.use(stack());
+}
 ```
 
 **Koa**
@@ -31,7 +40,9 @@ var stack = require('stack-middleware').koa;
 
 var app = new Koa();
 
-app.use(stack());
+if (process.env.NODE_ENV === 'development') {
+  app.use(stack());
+}
 ```
 
 ### Configuration

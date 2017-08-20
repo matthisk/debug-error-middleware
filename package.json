@@ -10,7 +10,9 @@
     "dev:koa": "nodemon --ext html,js bin/express.js",
     "test": "mocha tests/express.js; mocha tests/koa.js",
     "test:express": "mocha tests/express.js",
-    "test:koa": "mocha mocha tests/koa.js"
+    "test:koa": "mocha mocha tests/koa.js",
+    "preversion": "npm test",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "handlebars": "^4.0.10"
