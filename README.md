@@ -14,7 +14,7 @@ Currently we support these two HTTP frameworks:
 
 ### Setup
 
-Express
+**Express**
 
 ```javascript
 var stack = require('stack-middleware').express;
@@ -24,7 +24,7 @@ var app = express();
 app.use(stack());
 ```
 
-Koa
+**Koa**
 
 ```javascript
 var stack = require('stack-middleware').koa;
