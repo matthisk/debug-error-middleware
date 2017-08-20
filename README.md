@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/matthisk/stack-middleware.svg?branch=master)](https://travis-ci.org/matthisk/stack-middleware)
 
-Apply this middleware to display context information in the response to a failed 
-request.
+Apply this debug middleware to display context information in the response to a 
+failed request.
 
 ![Example Page](https://raw.githubusercontent.com/matthisk/stack-middleware/master/assets/example.png)
 
