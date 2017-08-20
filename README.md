@@ -24,24 +24,24 @@ The debug middleware should be loaded first so we can catch errors from all
 other middleware.
 
 ```javascript
-var stack = require('stack-middleware').express;
+var debugMiddleware = require('debug-error-middleware').express;
 
 var app = express();
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(stack());
+  app.use(debugMiddleware());
 }
 ```
 
 **Koa**
 
 ```javascript
-var stack = require('stack-middleware').koa;
+var debugMiddleware = require('debug-error-middleware').koa;
 
 var app = new Koa();
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(stack());
+  app.use(debugMiddleware());
 }
 ```
 
