@@ -1,9 +1,11 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const Handlebars = require('handlebars');
 
-const template = fs.readFileSync('./src/templates/index.html').toString();
+const pathToTemplate = path.join(__dirname, './templates/index.html');
+const template = fs.readFileSync(pathToTemplate).toString();
 const renderTemplate = Handlebars.compile(template, {});
 
 const util = require('./util');
