@@ -28,13 +28,13 @@ function checkBody(body) {
 
 describe('#stack', () => {
   it('fails when NODE_ENV="production"', () => {
-    process.env['NODE_ENV'] = 'production';
+    process.env.NODE_ENV = 'production';
 
-    expect(function() {
+    expect(() => {
       stack();
     }).to.throw();
 
-    process.env['NODE_ENV'] = undefined;
+    process.env.NODE_ENV = undefined;
   });
 
   it('handles a synchronous error', done => {

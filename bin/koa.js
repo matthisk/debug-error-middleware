@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line
 const Koa = require('koa');
 
 const stack = require('../index').koa;

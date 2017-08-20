@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line
 const express = require('express');
 const stack = require('../index').express;
 
