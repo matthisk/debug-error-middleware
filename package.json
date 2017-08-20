@@ -6,8 +6,11 @@
   "description": "Express/Koa error handling middleware",
   "scripts": {
     "precommit": "npm run lint",
-    "lint": "eslint --ext js --cache --fix .",
-    "test": "mocha tests/express.js; mocha tests/koa.js"
+    "lint": "eslint --cache --fix .",
+    "dev:koa": "nodemon --ext html,js bin/express.js",
+    "test": "mocha tests/express.js; mocha tests/koa.js",
+    "test:express": "mocha tests/express.js",
+    "test:koa": "mocha mocha tests/koa.js"
   },
   "dependencies": {
     "handlebars": "^4.0.10",
