@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
 const express = require('express');
 const expect = require('chai').expect;
 const request = require('request');
@@ -26,6 +27,16 @@ function checkBody(body) {
 }
 
 describe('#stack', () => {
+  it('fails when NODE_ENV="production"', () => {
+    process.env['NODE_ENV'] = 'production';
+
+    expect(function() {
+      stack();
+    }).to.throw();
+
+    process.env['NODE_ENV'] = undefined;
+  });
+
   it('handles a synchronous error', done => {
     // eslint-disable-next-line no-unused-vars
     app.use((req, res, next) => {
