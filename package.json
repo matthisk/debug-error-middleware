@@ -1,5 +1,5 @@
 {
-  "name": "stack-middleware",
+  "name": "debug-error-middleware",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "test:koa": "mocha mocha tests/koa.js"
   },
   "dependencies": {
+    "express": "^4.15.4",
     "handlebars": "^4.0.10",
     "highlight.js": "^9.12.0"
   },
