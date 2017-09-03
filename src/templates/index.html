@@ -3,7 +3,7 @@
 <head>
   <title>{{ exception.constructor.name }} - Exception Page</title>
   <style>
-    {{{ codemirrorStyles }}}
+    {{{ prismStyles }}}
   </style>
   <style>
     /*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
@@ -226,10 +226,17 @@
     .stack-trace-editor {
       height: 0px;
       padding: 0;
+      overflow: hidden;
+    }
+
+    .stack-trace-editor pre {
+      margin-top: 0;
+      margin-bottom: 0;
     }
 
     .stack-trace-editor-open {
-      height: 400px;
+      height: auto;
+      max-height: 400px;
     }
 
     .CodeMirror {
@@ -337,6 +344,8 @@
       margin-bottom: 1rem;
     }
 
+    
+
     @media screen and (min-device-width: 1024px) {
       main {
         flex-direction: row;
@@ -366,7 +375,7 @@
         
         {{#if context.lineNumber}}
         <div class="stack-trace-editor">
-          <textarea class="editor" data-line="{{context.lineNumber}}" data-start="{{context.lineStart}}">{{context.code}}</textarea>
+          <pre class="line-numbers language-javascript" data-line="{{context.lineNumber}}" data-start="{{context.lineStart}}"><code>{{context.code}}</code></pre>
         </div>
         {{/if}}
         {{/each}}
@@ -424,7 +433,7 @@
   </main>
 
   <script>
-    {{{ codemirrorSRC }}}
+    {{{ prismSRC }}}
   </script>
   <script>
     (function () {

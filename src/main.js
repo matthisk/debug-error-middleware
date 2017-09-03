@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const Handlebars = require('handlebars');
+const parseSourceMap = require('./sourcemap').parseSourceMap;
 
 const pathToTemplate = path.join(__dirname, './templates/index.html');
 const template = fs.readFileSync(pathToTemplate).toString();
@@ -13,22 +14,18 @@ const util = require('./util');
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 
-function loadCodeMirror() {
+function loadPrism() {
   const p = Promise.all([
-    readFile(path.join(__dirname, '../lib/codemirror/codemirror.js')),
-    readFile(path.join(__dirname, '../lib/codemirror/javascript.js')),
-    readFile(path.join(__dirname, '../lib/codemirror/codemirror.css')),
-    readFile(path.join(__dirname, '../lib/codemirror/theme/monokai.css'))
+    readFile(path.join(__dirname, '../lib/prism.js')),
+    readFile(path.join(__dirname, '../lib/prism.css'))
   ]);
 
   return p.then(args => {
-    const codemirrorSRC = args[0];
-    const codemirrorModeJS = args[1];
-    const codemirrorStyles = args[2];
-    const codemirrorTheme = args[3];
+    const prismSRC = args[0];
+    const prismStyles = args[1];
     return {
-      codemirrorSRC: codemirrorSRC + codemirrorModeJS,
-      codemirrorStyles: codemirrorStyles + codemirrorTheme
+      prismSRC,
+      prismStyles
     };
   });
 }
@@ -54,20 +51,25 @@ function parseStack(error) {
         fileContent: ''
       };
 
-      return exists(result.path).then(e => {
-        if (e) {
-          return readFile(result.path).then(file => {
-            result.fileContent = file.toString();
-            result.context = {};
-            result.context.lineStart = lineNumber - 10;
-            result.context.lineNumber = lineNumber;
-            result.context.code = result.fileContent;
+      return exists(result.path)
+        .then(e => {
+          if (e) {
+            return readFile(result.path).then(file => {
+              result.fileContent = file.toString();
+              result.context = {};
+              result.context.lineStart = Math.max(lineNumber - 10, 0);
+              result.context.lineNumber = lineNumber;
+              result.context.code = result.fileContent
+                .split('\n')
+                .slice(lineNumber - 10, lineNumber + 10)
+                .join('\n');
 
-            return result;
-          });
-        }
-        return result;
-      });
+              return result;
+            });
+          }
+          return result;
+        })
+        .then(r => parseSourceMap(r));
     })
   );
 
@@ -117,7 +119,7 @@ function getProcess() {
 }
 
 module.exports = function main(opts, error, req) {
-  return Promise.all([loadCodeMirror(), parseStack(error)]).then(args => {
+  return Promise.all([loadPrism(), parseStack(error)]).then(args => {
     const codemirror = args[0];
     const stack = args[1];
     // 3: Create config for Handlebars

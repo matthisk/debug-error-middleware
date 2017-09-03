@@ -16,7 +16,8 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "handlebars": "^4.0.10"
+    "handlebars": "^4.0.10",
+    "source-map": "^0.5.7"
   },
   "author": {
     "name": "Matthisk Heimensen",
@@ -38,6 +39,7 @@
     "mocha": "^3.5.0",
     "nodemon": "^1.11.0",
     "prettier": "^1.5.3",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "webpack": "^3.5.5"
   }
 }
