@@ -1,6 +1,6 @@
 ## Express/Koa error handling middleware
 
-[![Build Status](https://travis-ci.org/matthisk/stack-middleware.svg?branch=master)](https://travis-ci.org/matthisk/stack-middleware)
+[![Build Status](https://travis-ci.org/matthisk/debug-error-middleware.svg?branch=master)](https://travis-ci.org/matthisk/stack-middleware)
 
 Apply this debug middleware to display context information in the response to a 
 failed request.
