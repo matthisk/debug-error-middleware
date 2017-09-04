@@ -1,6 +1,7 @@
 const expect = require('chai').expect;
 const stripProtocol = require('./util').stripProtocol;
 const getLastLine = require('./util').getLastLine;
+const indexOfEndsWith = require('./util').indexOfEndsWith;
 
 describe('test strip path', () => {
   it('webpack url', () => {
@@ -38,5 +39,40 @@ describe('getLastLine', () => {
     const result = getLastLine(['hello world'].join('\n'));
 
     expect(result).to.equal('hello world');
+  });
+});
+
+describe('indexOfEndsWith', () => {
+  it('std', () => {
+    const index = indexOfEndsWith('node_modules/bin/koa.js', [
+      'webpack:///./node_modules/bin/express.js',
+      'webpack:///./node_modules/bin/koa.jsx',
+      'webpack:///./node_modules/bin/koa.js',
+      'webpack:///./node_modules/middleware/koa.js',
+    ]);
+  
+    expect(index).to.equal(2);
+  });
+
+  it('full string', () => {
+    const index = indexOfEndsWith('node_modules/bin/koa.js', [
+      'node_modules/bin/express.js',
+      'node_modules/bin/koa.jsx',
+      'node_modules/bin/koa.js',
+      'node_modules/middleware/koa.js',
+    ]);
+  
+    expect(index).to.equal(2);
+  });
+
+  it('not found', () => {
+    const index = indexOfEndsWith('node_modules/bin/test.js', [
+      'webpack:///./node_modules/bin/express.js',
+      'webpack:///./node_modules/bin/koa.jsx',
+      'webpack:///./node_modules/bin/koa.js',
+      'webpack:///./node_modules/middleware/koa.js',
+    ]);
+  
+    expect(index).to.equal(-1);
   });
 });

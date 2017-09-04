@@ -12,7 +12,18 @@ function getLastLine(input) {
   return input.substring(input.lastIndexOf('\n') + 1, input.length);
 }
 
+function indexOfEndsWith(source, sources) {
+  let result = -1;
+
+  sources.forEach((s, i) => {
+    if (s.endsWith(source)) result = i;
+  });
+
+  return result;
+}
+
 module.exports = {
   stripProtocol,
-  getLastLine
+  getLastLine,
+  indexOfEndsWith,
 };

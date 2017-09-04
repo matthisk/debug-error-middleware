@@ -4,6 +4,7 @@ const SourceMapConsumer = require('source-map').SourceMapConsumer;
 
 const stripProtocol = require('./util').stripProtocol;
 const getLastLine = require('./util').getLastLine;
+const indexOfEndsWith = require('./util').indexOfEndsWith;
 
 const patt = /^\/\/# sourceMappingURL=(.*)$/;
 
@@ -19,7 +20,6 @@ function parseSourceMap(input) {
     const sourceMapLocation = path.join(dirName, match[1]);
 
     const sm = JSON.parse(fs.readFileSync(sourceMapLocation));
-
     const sources = sm.sources.map(stripProtocol);
     const sourceMap = new SourceMapConsumer(sm);
 
@@ -29,13 +29,8 @@ function parseSourceMap(input) {
     });
 
     if (original && original.source) {
-      // const index = sources.indexOf(original.source);
       const source = stripProtocol(original.source);
-      const index = sources
-        .map((s, i) => (s.endsWith(source) ? i : -1))
-        .reduce((mem, x) => (x > -1 ? x : -1), -1);
-
-      // console.log('sources', sources);
+      const index = indexOfEndsWith(source, sources);
 
       if (index < 0) {
         console.error(
