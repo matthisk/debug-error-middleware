@@ -45,6 +45,14 @@ if (process.env.NODE_ENV === 'development') {
 }
 ```
 
+### Source Map Support
+
+Even though it is not desirable to run transpiled source code inside the
+node js runtime, you often do not escape the use of it because of Server Side
+Rendering applications. `debug-error-middleware` automatically supports sourcemaps. 
+This will result in stack traces that are easier to interpret. You can disable 
+source map support through a configuration option.
+
 ### Configuration
 
 The following configuration options are available:
@@ -52,5 +60,6 @@ The following configuration options are available:
 ```javascript
 {
   disabledForXHR: true // Disable the middleware for XHR requests
+  disableSourceMapSupport: false // Disables support for sourcemaps
 }
 ```

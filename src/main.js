@@ -58,7 +58,7 @@ function trimResult(input) {
   return result;
 }
 
-function parseStack(error) {
+function parseStack(opts, error) {
   const stack = error.stack.split('\n').slice(1);
   const regex = /at ([\w.]+) \(([^:]+):(\d+):(\d+)\)/;
 
@@ -89,7 +89,7 @@ function parseStack(error) {
           }
           return result;
         })
-        .then(r => parseSourceMap(r))
+        .then(r => (opts.disableSourceMapSupport ? r : parseSourceMap(r)))
         .then(r => trimResult(r));
     })
   );
@@ -140,7 +140,7 @@ function getProcess() {
 }
 
 module.exports = function main(opts, error, req) {
-  return Promise.all([loadPrism(), parseStack(error)]).then(args => {
+  return Promise.all([loadPrism(), parseStack(opts, error)]).then(args => {
     const codemirror = args[0];
     const stack = args[1];
     // 3: Create config for Handlebars

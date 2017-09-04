@@ -1,7 +1,8 @@
 'use strict';
 
 const defaultOptions = {
-  disabledForXHR: true
+  disabledForXHR: true,
+  disableSourceMapSupport: false,
 };
 
 module.exports.express = function stack(options) {
