@@ -2,7 +2,7 @@
 
 const defaultOptions = {
   disabledForXHR: true,
-  disableSourceMapSupport: false,
+  disableSourceMapSupport: false
 };
 
 module.exports.express = function stack(options) {
