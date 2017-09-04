@@ -1,3 +1,5 @@
+'use strict';
+
 function stripProtocol(path) {
   const match = path.match(/^(\w+:\/\/).*/) || [];
 
