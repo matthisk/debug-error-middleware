@@ -10,5 +10,6 @@ before_script:
   - if [[ $node_version > 3 ]]; then npm install express; fi
   - if [[ $node_version > 6 ]]; then npm install koa; fi
 script:
+  - npm run test:unit
   - if [[ $node_version > 3 ]]; then npm run test:express; fi
   - if [[ $node_version > 6 ]]; then npm run test:koa; fi

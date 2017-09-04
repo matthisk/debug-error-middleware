@@ -30,6 +30,34 @@ function loadPrism() {
   });
 }
 
+// const result = {
+//   line: number,
+//   column: number,
+//   at: string,
+//   path: string,
+//   code: string,
+// }
+
+function trimResult(input) {
+  const result = {};
+
+  const start = Math.max(input.line - 10, 0);
+  const end = input.line + 10;
+
+  result.trimmed = {};
+  result.trimmed.start = start + 1;
+  result.trimmed.line = Math.min(input.line, 10);
+
+  result.start = start + 1;
+  result.line = input.line;
+  result.column = input.column;
+  result.code = input.code.split('\n').slice(start, end).join('\n');
+  result.path = input.path;
+  result.at = input.at;
+
+  return result;
+}
+
 function parseStack(error) {
   const stack = error.stack.split('\n').slice(1);
   const regex = /at ([\w.]+) \(([^:]+):(\d+):(\d+)\)/;
@@ -48,28 +76,21 @@ function parseStack(error) {
         at: match[1],
         path: match[2],
         line: lineNumber,
-        fileContent: ''
+        code: ''
       };
 
       return exists(result.path)
         .then(e => {
           if (e) {
             return readFile(result.path).then(file => {
-              result.fileContent = file.toString();
-              result.context = {};
-              result.context.lineStart = Math.max(lineNumber - 10, 0);
-              result.context.lineNumber = lineNumber;
-              result.context.code = result.fileContent
-                .split('\n')
-                .slice(lineNumber - 10, lineNumber + 10)
-                .join('\n');
-
+              result.code = file.toString();
               return result;
             });
           }
           return result;
         })
-        .then(r => parseSourceMap(r));
+        .then(r => parseSourceMap(r))
+        .then(r => trimResult(r));
     })
   );
 

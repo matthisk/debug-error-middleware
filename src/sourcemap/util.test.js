@@ -48,9 +48,9 @@ describe('indexOfEndsWith', () => {
       'webpack:///./node_modules/bin/express.js',
       'webpack:///./node_modules/bin/koa.jsx',
       'webpack:///./node_modules/bin/koa.js',
-      'webpack:///./node_modules/middleware/koa.js',
+      'webpack:///./node_modules/middleware/koa.js'
     ]);
-  
+
     expect(index).to.equal(2);
   });
 
@@ -59,9 +59,9 @@ describe('indexOfEndsWith', () => {
       'node_modules/bin/express.js',
       'node_modules/bin/koa.jsx',
       'node_modules/bin/koa.js',
-      'node_modules/middleware/koa.js',
+      'node_modules/middleware/koa.js'
     ]);
-  
+
     expect(index).to.equal(2);
   });
 
@@ -70,9 +70,9 @@ describe('indexOfEndsWith', () => {
       'webpack:///./node_modules/bin/express.js',
       'webpack:///./node_modules/bin/koa.jsx',
       'webpack:///./node_modules/bin/koa.js',
-      'webpack:///./node_modules/middleware/koa.js',
+      'webpack:///./node_modules/middleware/koa.js'
     ]);
-  
+
     expect(index).to.equal(-1);
   });
 });

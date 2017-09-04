@@ -226,7 +226,8 @@
     .stack-trace-editor {
       height: 0px;
       padding: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: scroll;
     }
 
     .stack-trace-editor pre {
@@ -373,11 +374,18 @@
           <span class="bold">{{ path }}</span><span class="light"> at </span><span class="bold"> {{ at }} </span><span class="light"> at line </span><span class="bold">{{ line }}:{{ column }}</span>
         </div>
         
-        {{#if context.lineNumber}}
+        {{#if trimmed}}
         <div class="stack-trace-editor">
-          <pre class="line-numbers language-javascript" data-line="{{context.lineNumber}}" data-start="{{context.lineStart}}"><code>{{context.code}}</code></pre>
+          <pre class="line-numbers language-javascript" data-line="{{trimmed.line}}" data-start="{{trimmed.start}}"><code>{{code}}</code></pre>
+        </div>
+        {{else}}
+        <div class="stack-trace-editor">
+          <pre class="line-numbers language-javascript" data-line="{{line}}"><code>{{code}}</code></pre>
         </div>
         {{/if}}
+
+        <!-- {{#if context.lineNumber}}
+        {{/if}} -->
         {{/each}}
       </div>
 
@@ -437,23 +445,6 @@
   </script>
   <script>
     (function () {
-      var editors = {};
-      
-      document.querySelectorAll('.editor')
-        .forEach((el, i) => {
-          el.id = 'codemirror-' + i;
-          var editor = CodeMirror.fromTextArea(el, {
-            lineNumbers: true,
-            // firstLineNumber: parseInt(el.getAttribute('data-start'), 10),
-            mode: 'javascript',
-            readOnly: true,
-            theme: 'monokai',
-            viewportMargin: Infinity,
-          });
-
-          editors[el.id] = editor;
-        });
-      
       document.querySelectorAll('.stack-trace-line')
         .forEach(el => {
           el.addEventListener('click', (event) => {
@@ -461,25 +452,7 @@
 
             if (!sibling.classList.contains('stack-trace-editor')) return;
 
-            var textarea = sibling.querySelector('textarea');
-
             sibling.classList.toggle('stack-trace-editor-open');
-
-            editors[textarea.id].refresh();
-
-            const line = parseInt(textarea.getAttribute('data-line'), 10);
-            const lineDOM = sibling.querySelector('.CodeMirror-code').childNodes[line - 1];
-            const scrollTo = lineDOM.getBoundingClientRect().top - (sibling.clientHeight*0.5);
-
-
-            console.log({
-              line: line,
-              scrollTop: lineDOM.getBoundingClientRect().top,
-              clientHeight: sibling.clientHeight,
-            });
-            editors[textarea.id].scrollTo(0, scrollTo);
-
-            lineDOM.classList.add('stack-trace-code-active');
           });
         });
     })();

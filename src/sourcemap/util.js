@@ -25,5 +25,5 @@ function indexOfEndsWith(source, sources) {
 module.exports = {
   stripProtocol,
   getLastLine,
-  indexOfEndsWith,
+  indexOfEndsWith
 };

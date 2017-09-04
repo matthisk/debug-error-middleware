@@ -10,22 +10,31 @@ const patt = /^\/\/# sourceMappingURL=(.*)$/;
 
 function parseSourceMap(input) {
   const result = Object.assign({}, input);
-  const context = result.context;
-  const content = result.fileContent;
+  const code = result.code;
 
-  const match = getLastLine(content).match(patt);
+  const match = getLastLine(code).match(patt);
 
   if (match) {
+    let sm;
     const dirName = path.dirname(input.path);
     const sourceMapLocation = path.join(dirName, match[1]);
 
-    const sm = JSON.parse(fs.readFileSync(sourceMapLocation));
+    try {
+      sm = JSON.parse(fs.readFileSync(sourceMapLocation));
+    } catch (err) {
+      console.error(
+        [`Unable to locate sourcemap at ${sourceMapLocation}`].join('\n')
+      );
+
+      return result;
+    }
+
     const sources = sm.sources.map(stripProtocol);
     const sourceMap = new SourceMapConsumer(sm);
 
     const original = sourceMap.originalPositionFor({
-      line: context.lineNumber,
-      column: result.column
+      line: input.line,
+      column: input.column
     });
 
     if (original && original.source) {
@@ -43,19 +52,12 @@ function parseSourceMap(input) {
         return result;
       }
 
-      const originalContent = sm.sourcesContent[index];
+      const originalCode = sm.sourcesContent[index];
 
-      context.lineStart = Math.max(original.line - 10, 0);
-      context.lineNumber = original.line;
-
+      result.code = originalCode;
       result.path = original.source;
       result.line = original.line;
       result.column = original.column;
-
-      context.code = originalContent
-        .split('\n')
-        .slice(context.lineStart, original.line + 10)
-        .join('\n');
     }
   }
 

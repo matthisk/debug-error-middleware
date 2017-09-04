@@ -26,65 +26,53 @@ describe('sourcemap support', () => {
   it('transform stack (1)', () => {
     const output = parseSourceMap({
       path: sourcePath,
-      fileContent,
+      code: fileContent,
       column: 0,
-      context: {
-        lineStart: 3841,
-        lineNumber: 3851
-      }
+      line: 3851,
+      at: 'methodName'
     });
 
     expect(output.path).to.equal('webpack:///bin/koa-webpack.js');
-    expect(output.context.lineNumber).to.equal(10);
-    expect(output.context.lineStart).to.equal(0);
+    expect(output.line).to.equal(10);
   });
   it('transform stack (2)', () => {
     const output = parseSourceMap({
       path: sourcePath,
-      fileContent,
+      code: fileContent,
       column: 0,
-      context: {
-        lineStart: 6530,
-        lineNumber: 6540
-      }
+      line: 6540,
+      at: 'methodName'
     });
 
     expect(output.path).to.equal(
       'webpack:///node_modules/koa-compose/index.js'
     );
-    expect(output.context.lineNumber).to.equal(42);
-    expect(output.context.lineStart).to.equal(32);
+    expect(output.line).to.equal(42);
   });
   it('transform stack (3)', () => {
     const output = parseSourceMap({
       path: sourcePath,
-      fileContent,
+      code: fileContent,
       column: 0,
-      context: {
-        lineStart: 6531,
-        lineNumber: 6541
-      }
+      line: 6541,
+      at: 'methodName'
     });
 
     expect(output.path).to.equal(
       'webpack:///node_modules/koa-compose/index.js'
     );
-    expect(output.context.lineNumber).to.equal(43);
-    expect(output.context.lineStart).to.equal(33);
+    expect(output.line).to.equal(43);
   });
   it('transform stack (4)', () => {
     const output = parseSourceMap({
       path: sourcePath,
-      fileContent,
+      code: fileContent,
       column: 0,
-      context: {
-        lineStart: 16958,
-        lineNumber: 16968
-      }
+      line: 16968,
+      at: 'methodName'
     });
 
     expect(output.path).to.equal('webpack:///src/middleware/koa.js');
-    expect(output.context.lineNumber).to.equal(10);
-    expect(output.context.lineStart).to.equal(0);
+    expect(output.line).to.equal(10);
   });
 });
