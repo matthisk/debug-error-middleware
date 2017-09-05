@@ -23,7 +23,7 @@ Currently we support these two HTTP frameworks:
 ### Setup
 
 ```
-npm install debug-error-middleware
+$ npm install debug-error-middleware
 ```
 
 Never enable the DEBUG middleware in a production environment. This could result
