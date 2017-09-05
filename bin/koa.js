@@ -3,11 +3,11 @@
 // eslint-disable-next-line
 const Koa = require('koa');
 
-const stack = require('../index').koa;
+const debugMiddleware = require('../index').koa;
 
 const app = new Koa();
 
-app.use(stack());
+app.use(debugMiddleware());
 
 app.use(async () => {
   throw new TypeError('Converting circular structure to JSON');
@@ -15,4 +15,4 @@ app.use(async () => {
 
 app.listen(3000);
 
-console.log('[stack] listining at 3000');
+console.log('[debugMiddleware] listining at 3000');

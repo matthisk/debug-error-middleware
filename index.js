@@ -2,7 +2,8 @@
 
 const defaultOptions = {
   disabledForXHR: true,
-  disableSourceMapSupport: false
+  disableSourceMapSupport: false,
+  theme: 'okaidia'
 };
 
 module.exports.express = function stack(options) {

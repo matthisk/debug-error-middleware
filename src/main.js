@@ -13,11 +13,37 @@ const util = require('./util');
 
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
+const readdir = util.promisify(fs.readdir);
 
-function loadPrism() {
+function loadPrismTheme(theme) {
+  const pathToTheme = path.join(__dirname, '../lib/themes', `${theme}.css`);
+  const pathToDefaultTheme = path.join(__dirname, '../lib/themes/okaidia.css');
+
+  return exists(pathToTheme).then(exi => {
+    if (exi) return readFile(pathToTheme);
+
+    readdir(path.join(__dirname, '../lib/themes')).then(ls => {
+      console.error(
+        [
+          '',
+          `Unknown theme: ${theme}`,
+          'Use one of the following themes:',
+          ls
+            .filter(i => i !== '.DS_Store')
+            .map(i => `  ${i.split('.')[0]}`)
+            .join('\n')
+        ].join('\n')
+      );
+    });
+
+    return readFile(pathToDefaultTheme);
+  });
+}
+
+function loadPrism(opts) {
   const p = Promise.all([
     readFile(path.join(__dirname, '../lib/prism.js')),
-    readFile(path.join(__dirname, '../lib/prism.css'))
+    loadPrismTheme(opts.theme)
   ]);
 
   return p.then(args => {
@@ -29,14 +55,6 @@ function loadPrism() {
     };
   });
 }
-
-// const result = {
-//   line: number,
-//   column: number,
-//   at: string,
-//   path: string,
-//   code: string,
-// }
 
 function trimResult(input) {
   const result = {};
@@ -140,7 +158,7 @@ function getProcess() {
 }
 
 module.exports = function main(opts, error, req) {
-  return Promise.all([loadPrism(), parseStack(opts, error)]).then(args => {
+  return Promise.all([loadPrism(opts), parseStack(opts, error)]).then(args => {
     const codemirror = args[0];
     const stack = args[1];
     // 3: Create config for Handlebars
