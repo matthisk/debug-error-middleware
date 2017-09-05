@@ -172,6 +172,18 @@ module.exports = function main(opts, error, req) {
       process: getProcess()
     };
 
+    console.error(
+      [
+        `${error.constructor.name}: ${error.message}`,
+        stack
+          .map(
+            trace =>
+              `    at ${trace.at} (${trace.path}:${trace.line}:${trace.column})`
+          )
+          .join('\n')
+      ].join('\n')
+    );
+
     config = Object.assign({}, config, codemirror);
 
     return renderTemplate(config);
