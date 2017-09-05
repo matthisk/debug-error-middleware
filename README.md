@@ -22,6 +22,10 @@ Currently we support these two HTTP frameworks:
 
 ### Setup
 
+```
+npm install debug-error-middleware
+```
+
 Never enable the DEBUG middleware in a production environment. This could result
 in leaking sensitive information (e.g. ENV variables). The middleware throws an
 error if you try to load it with `NODE_ENV` set to `"production"`.
