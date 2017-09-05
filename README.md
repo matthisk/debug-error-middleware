@@ -2,8 +2,16 @@
 
 [![Build Status](https://travis-ci.org/matthisk/debug-error-middleware.svg?branch=master)](https://travis-ci.org/matthisk/stack-middleware)
 
-Apply this debug middleware to display context information in the response to a 
-failed request.
+Better context information for NodeJS Errors during development. The middleware
+parses potential errors that occur during a request/response cycle and display
+the stack trace plus additional context in the response.
+
+Features:
+
+* Stack traces + collapsable code (snippets)
+* Sourcemaps
+* Environment variables
+* Request information
 
 ![Example Page](https://raw.githubusercontent.com/matthisk/stack-middleware/master/assets/example.png)
 
@@ -16,7 +24,7 @@ Currently we support these two HTTP frameworks:
 
 Never enable the DEBUG middleware in a production environment. This could result
 in leaking sensitive information (e.g. ENV variables). The middleware throws an
-error if you try to load it when `NODE_ENV` is set to `"production"`.
+error if you try to load it with `NODE_ENV` set to `"production"`.
 
 **Express**
 
