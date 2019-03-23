@@ -17,7 +17,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "handlebars": "^4.0.10",
+    "handlebars": "^4.1.1",
     "source-map": "^0.5.7"
   },
   "author": {
