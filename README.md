@@ -73,6 +73,7 @@ The following configuration options are available:
 {
   theme: 'okaidia', // The prismjs theme to use
   disabledForXHR: true // Disable the middleware for XHR requests
+  excludeEnvVariables: [], // Name of environment variables to exclude
   disableSourceMapSupport: false // Disables support for sourcemaps
 }
 ```
