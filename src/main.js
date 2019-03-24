@@ -115,8 +115,9 @@ function parseStack(opts, error) {
   return results.then(r => r.filter(i => i));
 }
 
-function getEnvironment() {
-  return util.toKeyValueList(process.env);
+function getEnvironment(opts) {
+  const environment = util.toKeyValueList(process.env);
+  return environment.filter(v => opts.excludeEnvVariables.indexOf(v.key) < 0);
 }
 
 function getGlobals() {
@@ -167,7 +168,7 @@ module.exports = function main(opts, error, req) {
       headers: getHeaders(req),
       request: getRequest(req),
       stack,
-      environment: getEnvironment(),
+      environment: getEnvironment(opts),
       globals: getGlobals(),
       process: getProcess()
     };

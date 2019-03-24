@@ -3,6 +3,7 @@
 const defaultOptions = {
   disabledForXHR: true,
   disableSourceMapSupport: false,
+  excludeEnvVariables: [],
   theme: 'okaidia'
 };
 
